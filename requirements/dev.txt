@@ -1,0 +1,9 @@
+-r ./publish.txt
+-r ./test.txt
+black==21.12b0
+flake8==4.0.1
+isort==5.10.1
+mypy==0.931
+pre-commit==2.17.0
+pytest-watch==4.2.0
+tox==3.24.5

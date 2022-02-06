@@ -1,0 +1,49 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-added-large-files # Prevent giant files from being committed
+      - id: check-ast # Simply check whether the files parse as valid python.
+      - id: check-builtin-literals # Require literal syntax when initializing empty or zero Python builtin types.
+      - id: check-byte-order-marker # forbid files which have a UTF-8 byte-order marker
+      - id: check-case-conflict # Check for files that would conflict in case-insensitive filesystems
+      - id: check-docstring-first # Checks a common error of defining a docstring after code.
+      - id: check-executables-have-shebangs # Ensures that (non-binary) executables have a shebang.
+      - id: check-json # This hook checks json files for parseable syntax.
+      - id: check-merge-conflict # Check for files that contain merge conflict strings.
+      - id: check-shebang-scripts-are-executable # Ensures that (non-binary) files with a shebang are executable.
+      - id: check-symlinks # Checks for symlinks which do not point to anything.
+      - id: check-toml # This hook checks toml files for parseable syntax.
+      - id: check-vcs-permalinks # Ensures that links to vcs websites are permalinks.
+      - id: check-xml # This hook checks xml files for parseable syntax.
+      - id: check-yaml # This hook checks yaml files for parseable syntax.
+      - id: debug-statements # Check for debugger imports and py37+ `breakpoint()` calls in python source.
+      - id: destroyed-symlinks # Detects symlinks which are changed to regular files with a content of a path which that symlink was pointing to.
+      - id: detect-private-key # Detects the presence of private keys
+      - id: end-of-file-fixer # Ensures that a file is either empty, or ends with one newline.
+      - id: fix-byte-order-marker # Removes UTF-8 byte order marker
+      - id: forbid-new-submodules # Prevent addition of new git submodules
+      - id: mixed-line-ending # Replaces or checks mixed line ending
+      - id: requirements-txt-fixer # Sorts entries in requirements.txt
+      - id: sort-simple-yaml # Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks.
+      - id: trailing-whitespace # This hook trims trailing whitespace.
+
+  - repo: https://github.com/psf/black
+    rev: 21.12b0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.931
+    hooks:
+      - id: mypy
