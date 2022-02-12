@@ -113,6 +113,23 @@ $ tox
 
 ### Publishing
 
+**Create**
+
+1. Update the version number in `logfmter/__init__.py`.
+
+2. Add an entry in `HISTORY.md`.
+
+3. Commit the changes, tag the commit, and push the tags:
+
+   ```sh
+   $ git commit -am "v<major>.<minor>.<patch>"
+   $ git tag v<major>.<minor>.<patch>
+   $ git push --tags
+   ```
+
+4. Convert the tag to a release in GitHub with the history
+   entry as the description.
+
 **Build**
 
 ```sh
