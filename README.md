@@ -29,11 +29,10 @@ via the `extra` keyword argument or by passing a dictionary as the log message.
 import logging
 from logfmter import Logfmter
 
-handler = logging.StreamHandler(sys.stderr)
+handler = logging.StreamHandler()
 handler.setFormatter(Logfmter())
 
-logger = logging.getLogger()
-logger.addHandler(handler)
+logging.basicConfig(handlers=[handler])
 
 logger.error("hello", extra={"alpha": 1}) # at=ERROR msg=hello alpha=1
 logger.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
@@ -61,11 +60,10 @@ class CustomLogfmter(Logfmter):
 
 	return super().format_value(value)
 
-handler = logging.StreamHandler(sys.stderr)
+handler = logging.StreamHandler()
 handler.setFormatter(CustomLogfmter())
 
-logger = logging.getLogger()
-logger.addHandler(handler)
+logging.basicConfig(handlers=[handler])
 
 logger.error({"example": True}) # at=ERROR example=yes
 ```
