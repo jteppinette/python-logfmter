@@ -34,8 +34,8 @@ handler.setFormatter(Logfmter())
 
 logging.basicConfig(handlers=[handler])
 
-logger.error("hello", extra={"alpha": 1}) # at=ERROR msg=hello alpha=1
-logger.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
+logging.error("hello", extra={"alpha": 1}) # at=ERROR msg=hello alpha=1
+logging.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
 ```
 
 **Customize**
@@ -65,7 +65,7 @@ handler.setFormatter(CustomLogfmter())
 
 logging.basicConfig(handlers=[handler])
 
-logger.error({"example": True}) # at=ERROR example=yes
+logging.error({"example": True}) # at=ERROR example=yes
 ```
 
 ## Development
