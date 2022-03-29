@@ -38,11 +38,15 @@ class Logfmter(logging.Formatter):
         """
         Process the provided string with any necessary quoting and/or escaping.
         """
-        needs_escaping = '"' in value
+        needs_dquote_escaping = '"' in value
+        needs_newline_escaping = "\n" in value
         needs_quoting = " " in value or "=" in value
 
-        if needs_escaping:
+        if needs_dquote_escaping:
             value = value.replace('"', '\\"')
+
+        if needs_newline_escaping:
+            value = value.replace("\n", "\\n")
 
         if needs_quoting:
             value = '"{}"'.format(value)

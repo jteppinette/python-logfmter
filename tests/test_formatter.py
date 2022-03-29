@@ -19,6 +19,9 @@ from logfmter.formatter import Logfmter
         (' "', '" \\""'),
         # If the string is empty, then it should be quoted.
         ("", '""'),
+        # If the string contains a newline, then it should be escaped.
+        ("\n", "\\n"),
+        ("\n\n", "\\n\\n"),
     ],
 )
 def test_format_string(value, expected):
