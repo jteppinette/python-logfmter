@@ -78,7 +78,7 @@ def test_get_extra(record, expected):
         ({"levelname": "INFO", "msg": "="}, 'at=INFO msg="="'),
     ],
 )
-def test_logfmt_formatter_format(record, expected):
+def test_format(record, expected):
     # Generate a real `logging.LogRecord` from the provided dictionary.
     record = logging.makeLogRecord(record)
 
