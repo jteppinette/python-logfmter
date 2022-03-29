@@ -4,3 +4,11 @@
 __pycache__
 dist
 venv
+
+# Add the following files to the allowlist
+# under various searching tools.
+!.envrc
+!.flake8
+!.github
+!.gitignore
+!.pre-commit-config.yaml
