@@ -1,6 +1,12 @@
+import io
 import logging
 import numbers
-from typing import Tuple
+import traceback
+from contextlib import closing
+from types import TracebackType
+from typing import Tuple, Type, cast
+
+ExcInfo = Tuple[Type[BaseException], BaseException, TracebackType]
 
 # Reserved log record attributes cannot be overwritten. They
 # will not included in the formatted log.
@@ -68,6 +74,31 @@ class Logfmter(logging.Formatter):
         return cls.format_string(str(value))
 
     @classmethod
+    def format_exc_info(cls, exc_info: ExcInfo) -> str:
+        """
+        Format the provided exc_info into a logfmt formatted string.
+
+        This function should only be used to format exceptions which are
+        currently being handled. Not with those exceptions which are
+        manually passed into the logger. For example:
+
+            try:
+                raise Exception()
+            except Exception:
+                logging.exception()
+        """
+        _type, exc, tb = exc_info
+
+        with closing(io.StringIO()) as sio:
+            traceback.print_exception(_type, exc, tb, None, sio)
+            value = sio.getvalue()
+
+        # Tracebacks have a single trailing newline that we don't need.
+        value = value.rstrip("\n")
+
+        return cls.format_string(value)
+
+    @classmethod
     def format_params(cls, params: dict) -> str:
         """
         Return a string representing the logfmt formatted parameters.
@@ -95,9 +126,12 @@ class Logfmter(logging.Formatter):
             extra = self.get_extra(record)
             params = {"msg": record.getMessage(), **extra}
 
-        return " ".join(
-            (
-                "at={}".format(record.levelname),
-                self.format_params(params),
-            )
-        )
+        tokens = ["at={}".format(record.levelname), self.format_params(params)]
+
+        if record.exc_info:
+            # Cast exc_info to its not null variant to make mypy happy.
+            exc_info = cast(ExcInfo, record.exc_info)
+
+            tokens.append("exc_info={}".format(self.format_exc_info(exc_info)))
+
+        return " ".join(tokens)

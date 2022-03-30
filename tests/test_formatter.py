@@ -1,4 +1,5 @@
 import logging
+import sys
 
 import pytest
 
@@ -49,6 +50,23 @@ def test_format_value(value, expected):
     assert Logfmter.format_value(value) == expected
 
 
+def test_format_exc_info():
+    try:
+        raise Exception("alpha")
+    except Exception:
+        exc_info = sys.exc_info()
+
+    value = Logfmter().format_exc_info(exc_info)
+
+    assert value.startswith('"') and value.endswith('"')
+
+    tokens = value.strip('"').split("\\n")
+
+    assert len(tokens) == 4
+    assert "Traceback (most recent call last):" in tokens
+    assert "Exception: alpha" in tokens
+
+
 @pytest.mark.parametrize(
     "value,expected",
     [({"a": 1}, "a=1"), ({"a": 1, "b": 2}, "a=1 b=2"), ({"a": " "}, 'a=" "')],
@@ -79,6 +97,20 @@ def test_get_extra(record, expected):
         ({"levelname": "INFO", "msg": "test", "a": 1}, "at=INFO msg=test a=1"),
         # All parameter values will be passed through the format pipeline.
         ({"levelname": "INFO", "msg": "="}, 'at=INFO msg="="'),
+        # Any existing exc_info will be appropriately formatted and
+        # added to the log output.
+        (
+            {
+                "levelname": "INFO",
+                "msg": "alpha",
+                "exc_info": (
+                    Exception,
+                    Exception("alpha"),
+                    None,
+                ),  # We don't pass a traceback, because they are difficult to fake.
+            },
+            'at=INFO msg=alpha exc_info="Exception: alpha"',
+        ),
     ],
 )
 def test_format(record, expected):
