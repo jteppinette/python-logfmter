@@ -124,7 +124,7 @@ $ tox
    ```sh
    $ git commit -am "v<major>.<minor>.<patch>"
    $ git tag v<major>.<minor>.<patch>
-   $ git push --tags
+   $ git push origin main --tags
    ```
 
 4. Convert the tag to a release in GitHub with the history
