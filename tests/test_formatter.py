@@ -111,6 +111,9 @@ def test_get_extra(record, expected):
             },
             'at=INFO msg=alpha exc_info="Exception: alpha"',
         ),
+        # If, for some odd reason, someone passes in an empty msg dictionary. It
+        # should be properly formatted without extra spaces.
+        ({"levelname": "INFO", "msg": {}}, "at=INFO"),
     ],
 )
 def test_format(record, expected):

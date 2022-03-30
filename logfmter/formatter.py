@@ -126,7 +126,11 @@ class Logfmter(logging.Formatter):
             extra = self.get_extra(record)
             params = {"msg": record.getMessage(), **extra}
 
-        tokens = ["at={}".format(record.levelname), self.format_params(params)]
+        tokens = ["at={}".format(record.levelname)]
+
+        formatted_params = self.format_params(params)
+        if formatted_params:
+            tokens.append(formatted_params)
 
         if record.exc_info:
             # Cast exc_info to its not null variant to make mypy happy.
