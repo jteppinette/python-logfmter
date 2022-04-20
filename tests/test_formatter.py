@@ -1,5 +1,7 @@
 import logging
+import re
 import sys
+from datetime import datetime
 
 import pytest
 
@@ -116,8 +118,105 @@ def test_get_extra(record, expected):
         ({"levelname": "INFO", "msg": {}}, "at=INFO"),
     ],
 )
-def test_format(record, expected):
+def test_format_default(record, expected):
     # Generate a real `logging.LogRecord` from the provided dictionary.
     record = logging.makeLogRecord(record)
 
     assert Logfmter().format(record) == expected
+
+
+@pytest.mark.parametrize(
+    "keys,mapping,record,expected",
+    [
+        # Any provided keys should be included in the final params.
+        (
+            ["at", "levelno"],
+            None,
+            {"levelname": "INFO", "levelno": 1, "msg": {"a": 1}},
+            "at=INFO levelno=1 a=1",
+        ),
+        # If a provided key has a mapping and the mapping attribute exists,
+        # then that key should be included in the final params.
+        (
+            ["at", "no"],
+            {"at": "levelname", "no": "levelno"},
+            {"levelname": "INFO", "levelno": 1, "msg": {"a": 1}},
+            "at=INFO no=1 a=1",
+        ),
+        # If a provided key has a mapping and the mapping attribute does not exist,
+        # then that key should not be included in the final params.
+        (
+            ["at", "dne"],
+            {"at": "levelname", "dne": "?"},
+            {"levelname": "INFO", "msg": {"a": 1}},
+            "at=INFO a=1",
+        ),
+        # A user should be able to specify no default keys.
+        (
+            [],
+            None,
+            {"msg": {"a": 1}},
+            "a=1",
+        ),
+    ],
+)
+def test_format_provided_keys(keys, mapping, record, expected):
+    """
+    If someone requests an additional default key be added to the log output,
+    then it should be added as a parameter. Any provided mapping should also
+    be utilized.
+    """
+
+    # Generate a real `logging.LogRecord` from the provided dictionary.
+    record = logging.makeLogRecord(record)
+
+    if mapping:
+        formatter = Logfmter(keys=keys, mapping=mapping)
+    else:
+        formatter = Logfmter(keys=keys)
+
+    assert formatter.format(record) == expected
+
+
+def test_format_asctime():
+    """
+    If a user requests asctime in the default keys, then it should be rendered
+    in the final log output.
+    """
+    # Generate a real `logging.LogRecord` from the provided dictionary.
+    record = logging.makeLogRecord({"msg": "alpha"})
+
+    value = Logfmter(keys=["asctime"]).format(record)
+
+    asctime = re.search(r'asctime="(.*)"', value).group(1)
+    asctime_without_msecs = asctime.split(",")[0]
+    datetime.strptime(asctime_without_msecs, "%Y-%m-%d %H:%M:%S")
+
+
+def test_format_asctime_mapping():
+    """
+    If a user requests asctime in the default keys through a mapping, then it should be
+    rendered in the final log output.
+    """
+    # Generate a real `logging.LogRecord` from the provided dictionary.
+    record = logging.makeLogRecord({"msg": "alpha"})
+
+    value = Logfmter(keys=["when"], mapping={"when": "asctime"}).format(record)
+
+    asctime = re.search(r'when="(.*)"', value).group(1)
+    asctime_without_msecs = asctime.split(",")[0]
+    datetime.strptime(asctime_without_msecs, "%Y-%m-%d %H:%M:%S")
+
+
+def test_format_datefmt():
+    """
+    If a user requests asctime and provided a datefmt, then that datefmt will be used to
+    format the asctime.
+    """
+    # Generate a real `logging.LogRecord` from the provided dictionary.
+    record = logging.makeLogRecord({"msg": "alpha"})
+
+    value = Logfmter(keys=["asctime"], datefmt=" %H ").format(record)
+
+    asctime = re.search(r'asctime="(.*)"', value).group(1)
+    datetime.strptime(asctime, " %H ")

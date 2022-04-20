@@ -4,7 +4,7 @@ import numbers
 import traceback
 from contextlib import closing
 from types import TracebackType
-from typing import Tuple, Type, cast
+from typing import Dict, List, Tuple, Type, cast
 
 ExcInfo = Tuple[Type[BaseException], BaseException, TracebackType]
 
@@ -119,14 +119,51 @@ class Logfmter(logging.Formatter):
             key: value for key, value in record.__dict__.items() if key not in RESERVED
         }
 
+    def __init__(
+        self,
+        keys: List[str] = ["at"],
+        mapping: Dict[str, str] = {"at": "levelname"},
+        datefmt: str = None,
+    ):
+        self.keys = keys
+        self.mapping = mapping
+        self.datefmt = datefmt
+
     def format(self, record: logging.LogRecord) -> str:
+        # If the 'asctime' attribute will be used, then generate it.
+        if "asctime" in self.keys or "asctime" in self.mapping.values():
+            record.asctime = self.formatTime(record, self.datefmt)
+
         if isinstance(record.msg, dict):
             params = record.msg
         else:
             extra = self.get_extra(record)
             params = {"msg": record.getMessage(), **extra}
 
-        tokens = ["at={}".format(record.levelname)]
+        tokens = []
+
+        # Add the initial tokens from the provided list of default keys.
+        #
+        # This supports parameters which should be included in every log message. The
+        # values for these keys must already exist on the log record. If they are
+        # available under a different attribute name, then the formatter's mapping will
+        # be used to lookup these attributes. e.g. 'at' from 'levelname'
+        for key in self.keys:
+
+            attribute = key
+
+            # If there is a mapping for this key's attribute, then use it to lookup
+            # the key's value.
+            if key in self.mapping:
+                attribute = self.mapping[key]
+
+            # If the attribute doesn't exist on the log record, then skip it.
+            if not hasattr(record, attribute):
+                continue
+
+            value = getattr(record, attribute)
+
+            tokens.append("{}={}".format(key, self.format_value(value)))
 
         formatted_params = self.format_params(params)
         if formatted_params:

@@ -38,6 +38,75 @@ logging.error("hello", extra={"alpha": 1}) # at=ERROR msg=hello alpha=1
 logging.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
 ```
 
+**Default Keys**
+
+You can request that the formatter always include certain attributes on the
+log record by using the `keys` parameter. If the key you want to include in
+your output is represented by a different attribute on the log record, then
+you can use the `mapping` parameter to provide that key/attribute mapping.
+
+_Notice, the `keys` parameter defaults to `["at"]` and will be overridden
+by any provided `keys`._
+
+```python
+import logging
+from logfmter import Logfmter
+
+formatter = Logfmter(keys=["at", "processName"])
+
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+
+logging.basicConfig(handlers=[handler])
+
+logging.error("hello") # at=ERROR processName=MainProceess msg=hello
+```
+
+_Utilizing a mapping to convert the `processName` attribute to `process`._
+
+_Notice, the `mapping` parameter defaults to `{"at": "levelname"}` and will be overridden
+by any provided `mapping`._
+
+```python
+import logging
+from logfmter import Logfmter
+
+formatter = Logfmter(
+    keys=["at", "process"],
+    mapping={"at": "levelname", "process": "processName"}
+)
+
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+
+logging.basicConfig(handlers=[handler])
+
+logging.error("hello") # at=ERROR process=MainProceess msg=hello
+```
+
+**Date Formatting**
+
+If you request the `asctime` attribute (directly or through a mapping), then the date format
+can be overridden through the `datefmt` parameter.
+
+```python
+import logging
+from logfmter import Logfmter
+
+formatter = Logfmter(
+    keys=["at", "when"],
+    mapping={"at": "levelname", "when": "asctime"},
+    datefmt="%Y-%m-%d"
+)
+
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+
+logging.basicConfig(handlers=[handler])
+
+logging.error("hello") # at=ERROR when=2022-04-20 msg=hello
+```
+
 **Customize**
 
 You can subclass the formatter to change its behavior.
