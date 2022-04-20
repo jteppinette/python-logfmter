@@ -1,3 +1,8 @@
+# 0.0.5 (2022-04-20)
+
+- Add support for include native log record attributes in the final log output.
+- Add support for overriding the date format used when formatting the `asctime` attribute.
+
 # 0.0.4 (2022-03-29)
 
 - Fix the usage documentation
