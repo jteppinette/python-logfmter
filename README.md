@@ -5,6 +5,16 @@
 
 _A Python package which supports global [logfmt](https://www.brandur.org/logfmt) formatted logging._
 
+1. [Install](#install)
+2. [Usage](#usage)
+   1. [Integration](#integration)
+   2. [Configuration](#configuration)
+   3. [Extend](#extend)
+3. [Development](#development)
+   1. [Required Software](#required-software)
+   2. [Getting Started](#getting-started)
+   3. [Publishing](#publishing)
+
 ## Install
 
 ```sh
@@ -23,7 +33,13 @@ the standard library logging system similar to any `logging.Formatter`.
 The provided formatter will logfmt encode all logs. Key value pairs are provided
 via the `extra` keyword argument or by passing a dictionary as the log message.
 
-**Basic**
+If a log message is created via `logging.exception` (inside an exception handler), then
+the exception information (traceback, type, and message) will be encoded in the
+`exc_info` parameter.
+
+### Integration
+
+**[basicConfig](https://docs.python.org/3/library/logging.html#logging.basicConfig)**
 
 ```python
 import logging
@@ -38,15 +54,55 @@ logging.error("hello", extra={"alpha": 1}) # at=ERROR msg=hello alpha=1
 logging.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
 ```
 
-**Default Keys**
+**[dictConfig](https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig)**
 
-You can request that the formatter always include certain attributes on the
-log record by using the `keys` parameter. If the key you want to include in
-your output is represented by a different attribute on the log record, then
-you can use the `mapping` parameter to provide that key/attribute mapping.
+```python
+import logging.config
 
-_Notice, the `keys` parameter defaults to `["at"]` and will be overridden
-by any provided `keys`._
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "formatters": {
+            "logfmt": {
+                "()": "logfmter.Logfmter",
+            }
+        },
+        "handlers": {
+            "console": {"class": "logging.StreamHandler", "formatter": "logfmt"}
+        },
+        "loggers": {"": {"handlers": ["console"], "level": "INFO"}},
+    }
+)
+
+logging.info("hello", extra={"alpha": 1}) # at=INFO msg=hello alpha=1
+```
+
+_Notice, you can configure the `Logfmter` by providing keyword arguments as dictionary
+items after `"()"`:_
+
+```python
+...
+
+    "logfmt": {
+        "()": "logfmter.Logfmter",
+        "keys": [...],
+        "mapping": {...}
+    }
+
+...
+```
+
+### Configuration
+
+**keys**
+
+By default, the `at=<levelname>` key/value will be included in all log messages. These
+default keys can be overridden using the `keys` parameter. If the key you want to include
+in your output is represented by a different attribute on the log record, then you can
+use the `mapping` parameter to provide that key/attribute mapping.
+
+Reference the Python [`logging.LogRecord` Documentation](https://docs.python.org/3/library/logging.html?highlight=logrecord#logging.LogRecord)
+for a list of available attributes.
 
 ```python
 import logging
@@ -62,10 +118,11 @@ logging.basicConfig(handlers=[handler])
 logging.error("hello") # at=ERROR processName=MainProceess msg=hello
 ```
 
-_Utilizing a mapping to convert the `processName` attribute to `process`._
+**mapping**
 
-_Notice, the `mapping` parameter defaults to `{"at": "levelname"}` and will be overridden
-by any provided `mapping`._
+By default, a mapping of `{"at": "levelname"}` is used to allow the `at` key to reference
+the log record's `levelname` attribute. You can override this parameter to provide your
+own mappings.
 
 ```python
 import logging
@@ -84,7 +141,7 @@ logging.basicConfig(handlers=[handler])
 logging.error("hello") # at=ERROR process=MainProceess msg=hello
 ```
 
-**Date Formatting**
+**datefmt**
 
 If you request the `asctime` attribute (directly or through a mapping), then the date format
 can be overridden through the `datefmt` parameter.
@@ -107,7 +164,7 @@ logging.basicConfig(handlers=[handler])
 logging.error("hello") # at=ERROR when=2022-04-20 msg=hello
 ```
 
-**Customize**
+### Extend
 
 You can subclass the formatter to change its behavior.
 
