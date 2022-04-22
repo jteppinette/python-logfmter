@@ -1,3 +1,8 @@
+# 0.0.6 (2022-04-22)
+
+- Improve documentation.
+- Normalize keys to prevent users from breaking the logfmt style.
+
 # 0.0.5 (2022-04-20)
 
 - Add support for include native log record attributes in the final log output.
