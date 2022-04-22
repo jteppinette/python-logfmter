@@ -2,6 +2,7 @@
 
 [![pre-commit](https://github.com/jteppinette/python-logfmter/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/jteppinette/python-logfmter/actions/workflows/pre-commit.yml)
 [![test](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml/badge.svg)](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml)
+[![python-3.6-3.7-3.8-3.9-3.10](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10-blue.svg)](.github/workflows/test.yml)
 
 _A Python package which supports global [logfmt](https://www.brandur.org/logfmt) formatted logging._
 
