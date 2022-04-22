@@ -78,6 +78,19 @@ def test_format_params(value, expected):
 
 
 @pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("first_name", "first_name"),
+        ("first name", "first_name"),
+        ("", "_"),
+        ("first\nname", "first\\nname"),
+    ],
+)
+def test_normalize_key(value, expected):
+    assert Logfmter.normalize_key(value) == expected
+
+
+@pytest.mark.parametrize(
     "record,expected",
     [({"msg": "test"}, {}), ({"value": 1}, {"value": 1})],
 )
@@ -99,6 +112,11 @@ def test_get_extra(record, expected):
         ({"levelname": "INFO", "msg": "test", "a": 1}, "at=INFO msg=test a=1"),
         # All parameter values will be passed through the format pipeline.
         ({"levelname": "INFO", "msg": "="}, 'at=INFO msg="="'),
+        # All parameter keys should be normalized.
+        (
+            {"levelname": "INFO", "msg": {"first name": "josh"}},
+            "at=INFO first_name=josh",
+        ),
         # Any existing exc_info will be appropriately formatted and
         # added to the log output.
         (
@@ -157,6 +175,13 @@ def test_format_default(record, expected):
             None,
             {"msg": {"a": 1}},
             "a=1",
+        ),
+        # Any provided keys, along with their mappings, should be normalized.
+        (
+            ["log level"],
+            {"log level": "levelname"},
+            {"levelname": "INFO", "msg": {"a": 1}},
+            "log_level=INFO a=1",
         ),
     ],
 )

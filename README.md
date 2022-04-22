@@ -32,6 +32,11 @@ the standard library logging system similar to any `logging.Formatter`.
 
 The provided formatter will logfmt encode all logs. Key value pairs are provided
 via the `extra` keyword argument or by passing a dictionary as the log message.
+To prevent invalid keys from breaking the logfmt style, the formatter normalizes all keys:
+
+- replaces empty keys with an underscore
+- replaces spaces with underscores
+- escapes newlines
 
 If a log message is created via `logging.exception` (inside an exception handler), then
 the exception information (traceback, type, and message) will be encoded in the

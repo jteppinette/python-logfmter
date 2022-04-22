@@ -111,12 +111,32 @@ class Logfmter(logging.Formatter):
         )
 
     @classmethod
+    def normalize_key(cls, key: str) -> str:
+        """
+        Return a string whereby any spaces are converted to underscores and
+        newlines are escaped.
+
+        If the provided key is empty, then return a single underscore. This
+        function is used to prevent any logfmt parameters from having invalid keys.
+
+        As a choice of implementation, we normalize any keys instead of raising an
+        exception to prevent raising exceptions during logging. The goal is to never
+        impede logging. This is especially important when logging in exception handlers.
+        """
+        if not key:
+            return "_"
+
+        return key.replace(" ", "_").replace("\n", "\\n")
+
+    @classmethod
     def get_extra(cls, record: logging.LogRecord) -> dict:
         """
         Return a dictionary of logger extra parameters by filtering any reserved keys.
         """
         return {
-            key: value for key, value in record.__dict__.items() if key not in RESERVED
+            cls.normalize_key(key): value
+            for key, value in record.__dict__.items()
+            if key not in RESERVED
         }
 
     def __init__(
@@ -125,8 +145,10 @@ class Logfmter(logging.Formatter):
         mapping: Dict[str, str] = {"at": "levelname"},
         datefmt: str = None,
     ):
-        self.keys = keys
-        self.mapping = mapping
+        self.keys = [self.normalize_key(key) for key in keys]
+        self.mapping = {
+            self.normalize_key(key): value for key, value in mapping.items()
+        }
         self.datefmt = datefmt
 
     def format(self, record: logging.LogRecord) -> str:
@@ -135,7 +157,9 @@ class Logfmter(logging.Formatter):
             record.asctime = self.formatTime(record, self.datefmt)
 
         if isinstance(record.msg, dict):
-            params = record.msg
+            params = {
+                self.normalize_key(key): value for key, value in record.msg.items()
+            }
         else:
             extra = self.get_extra(record)
             params = {"msg": record.getMessage(), **extra}
