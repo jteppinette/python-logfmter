@@ -4,17 +4,42 @@
 [![test](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml/badge.svg)](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml)
 [![python-3.6-3.7-3.8-3.9-3.10](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8%20|%203.9%20|%203.10-blue.svg)](.github/workflows/test.yml)
 
-_A Python package which supports global [logfmt](https://www.brandur.org/logfmt) formatted logging._
+_A Python package which supports global [logfmt](https://www.brandur.org/logfmt) structured logging._
 
-1. [Install](#install)
-2. [Usage](#usage)
+_vanilla_
+
+```python
+> logging.warn("user created: [first name: {}] [last name: {}] [age: {}]".format(user["first_name"], user["last_name"], user["age"]))
+
+WARNING:root:user created: [first name: John] [last name: Doe] [age: 25]
+```
+
+_logfmter_
+
+```python
+> logging.warn("user created", extra=user)
+
+at=WARNING msg="user created" first_name=John last_name=Doe age=25
+```
+
+## Table of Contents
+
+1. [Why](#why)
+2. [Install](#install)
+3. [Usage](#usage)
    1. [Integration](#integration)
    2. [Configuration](#configuration)
-   3. [Extend](#extend)
-3. [Development](#development)
+   3. [Extension](#extension)
+4. [Development](#development)
    1. [Required Software](#required-software)
    2. [Getting Started](#getting-started)
    3. [Publishing](#publishing)
+
+## Why
+
+- enables both human and computer readable logs, [recommended as a "best practice" by Splunk](https://dev.splunk.com/enterprise/docs/developapps/addsupport/logging/loggingbestpractices/)
+- formats all first and third party logs, you never have to worry about a library using a different logging format
+- simple to integrate into any existing application, requires no changes to existing log statements i.e. [structlog](https://github.com/hynek/structlog)
 
 ## Install
 
@@ -24,24 +49,8 @@ $ pip install logfmter
 
 ## Usage
 
-Before integrating this library, you should be familiar with Python's logging
-functionality. I recommend reading the [Basic Logging
-Tutorial](https://docs.python.org/3/howto/logging.html).
-
 This package exposes a single `Logfmter` class that can be integrated into
-the standard library logging system similar to any `logging.Formatter`.
-
-The provided formatter will logfmt encode all logs. Key value pairs are provided
-via the `extra` keyword argument or by passing a dictionary as the log message.
-To prevent invalid keys from breaking the logfmt style, the formatter normalizes all keys:
-
-- replaces empty keys with an underscore
-- replaces spaces with underscores
-- escapes newlines
-
-If a log message is created via `logging.exception` (inside an exception handler), then
-the exception information (traceback, type, and message) will be encoded in the
-`exc_info` parameter.
+the [standard library logging system](https://docs.python.org/3/howto/logging.html) like any [`logging.Formatter`](https://docs.python.org/3/howto/logging.html#formatters).
 
 ### Integration
 
@@ -170,7 +179,7 @@ logging.basicConfig(handlers=[handler])
 logging.error("hello") # at=ERROR when=2022-04-20 msg=hello
 ```
 
-### Extend
+### Extension
 
 You can subclass the formatter to change its behavior.
 
