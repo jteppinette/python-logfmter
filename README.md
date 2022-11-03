@@ -107,6 +107,10 @@ items after `"()"`:_
 ...
 ```
 
+**[fileConfig](https://docs.python.org/3/library/logging.config.html#logging.config.fileConfig)**
+
+Using logfmter via fileConfig is not supported, because fileConfig does not support custom formatter initialization. There may be some hacks to make this work in the future. Let me know if you have ideas or really need this.
+
 ### Configuration
 
 **keys**
