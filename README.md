@@ -71,6 +71,10 @@ logging.error({"token": "Hello, World!"}) # at=ERROR token="Hello, World!"
 
 **[dictConfig](https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig)**
 
+_If you are using `dictConfig`, you need to consider your setting
+of `disable_existing_loggers`. It is enabled by default, and causes
+any third party module loggers to be disabled._
+
 ```python
 import logging.config
 
