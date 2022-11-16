@@ -4,7 +4,7 @@ import numbers
 import traceback
 from contextlib import closing
 from types import TracebackType
-from typing import Dict, List, Tuple, Type, cast
+from typing import Dict, List, Optional, Tuple, Type, cast
 
 ExcInfo = Tuple[Type[BaseException], BaseException, TracebackType]
 
@@ -143,7 +143,7 @@ class Logfmter(logging.Formatter):
         self,
         keys: List[str] = ["at"],
         mapping: Dict[str, str] = {"at": "levelname"},
-        datefmt: str = None,
+        datefmt: Optional[str] = None,
     ):
         self.keys = [self.normalize_key(key) for key in keys]
         self.mapping = {
