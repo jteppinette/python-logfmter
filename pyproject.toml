@@ -2,9 +2,6 @@
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.black]
-target-version = ["py311"]
-
 [tool.isort]
 profile = "black"
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
