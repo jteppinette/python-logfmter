@@ -5,3 +5,6 @@ build-backend = "setuptools.build_meta"
 [tool.isort]
 profile = "black"
 sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]

@@ -1,0 +1,3 @@
+graft src
+prune tests
+prune **/__pycache__
