@@ -21,6 +21,7 @@ at=WARNING msg="user created" first_name=John last_name=Doe age=25
    1. [Integration](#integration)
    2. [Configuration](#configuration)
    3. [Extension](#extension)
+   4. [Guides](#guides)
 4. [Development](#development)
    1. [Required Software](#required-software)
    2. [Getting Started](#getting-started)
@@ -208,7 +209,9 @@ logging.basicConfig(handlers=[handler])
 logging.error({"example": True}) # at=ERROR example=yes
 ```
 
-### Default Key/Value Pairs
+### Guides
+
+**Default Key/Value Pairs**
 
 Instead of providing key/value pairs at each log call, you can override
 the log record factory to provide defaults:
