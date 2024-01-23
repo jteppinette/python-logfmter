@@ -1,3 +1,9 @@
+# 0.0.7 (2024-01-23)
+
+- Improve documentation
+- Add support for default key/value pairs provided via log record factory.
+- Fix duplication issue that happened when keys/extras/msg values overlapped.
+
 # 0.0.6 (2022-04-22)
 
 - Improve documentation.
