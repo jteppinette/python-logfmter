@@ -245,3 +245,24 @@ def test_format_datefmt():
 
     asctime = re.search(r'asctime="(.*)"', value).group(1)
     datetime.strptime(asctime, " %H ")
+
+
+@pytest.mark.parametrize(
+    "record",
+    [
+        {"msg": "alpha", "levelname": "INFO"},
+        {"msg": {"msg": "alpha"}, "levelname": "INFO"},
+    ],
+)
+def test_extra_keys(record):
+    """
+    When attributes are added directly to the `logging.LogRecord` object, they should
+    be included in the output and not be duplicated, regardless of a str or dict based
+    msg object.
+    """
+    record = logging.makeLogRecord(record)
+    record.attr = "value"
+
+    assert (
+        Logfmter(keys=["at", "attr"]).format(record) == "at=INFO msg=alpha attr=value"
+    )

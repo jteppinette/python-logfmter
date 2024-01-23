@@ -161,8 +161,9 @@ class Logfmter(logging.Formatter):
                 self.normalize_key(key): value for key, value in record.msg.items()
             }
         else:
-            extra = self.get_extra(record)
-            params = {"msg": record.getMessage(), **extra}
+            params = {"msg": record.getMessage()}
+
+        params.update(self.get_extra(record))
 
         tokens = []
 
@@ -180,6 +181,11 @@ class Logfmter(logging.Formatter):
             # the key's value.
             if key in self.mapping:
                 attribute = self.mapping[key]
+
+            # If this key is in params, then skip it, because it was manually passed in
+            # will be added via the params system.
+            if attribute in params:
+                continue
 
             # If the attribute doesn't exist on the log record, then skip it.
             if not hasattr(record, attribute):

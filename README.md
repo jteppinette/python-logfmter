@@ -208,6 +208,25 @@ logging.basicConfig(handlers=[handler])
 logging.error({"example": True}) # at=ERROR example=yes
 ```
 
+### Default Key/Value Pairs
+
+Instead of providing key/value pairs at each log call, you can override
+the log record factory to provide defaults:
+
+```py
+_record_factory = logging.getLogRecordFactory()
+
+def record_factory(*args, **kwargs):
+    record = _record_factory(*args, **kwargs)
+    record.trace_id = 123
+    return record
+
+logging.setLogRecordFactory(record_factory)
+```
+
+This will cause all logs to have the `trace_id=123` pair regardless of including
+`trace_id` in keys or manually adding `trace_id` to the `extra` parameter or the `msg` object.
+
 ## Development
 
 ### Required Software
