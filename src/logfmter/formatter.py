@@ -33,6 +33,7 @@ RESERVED: Tuple[str, ...] = (
     "processName",
     "relativeCreated",
     "stack_info",
+    "taskName",
     "thread",
     "threadName",
 )
