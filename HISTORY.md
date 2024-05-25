@@ -1,3 +1,7 @@
+# 0.0.8 (2024-05-24)
+
+- Add official support for Python 3.12.
+
 # 0.0.7 (2024-01-23)
 
 - Improve documentation
