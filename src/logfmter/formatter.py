@@ -9,7 +9,7 @@ from typing import Dict, List, Optional, Tuple, Type, cast
 ExcInfo = Tuple[Type[BaseException], BaseException, TracebackType]
 
 # Reserved log record attributes cannot be overwritten. They
-# will not included in the formatted log.
+# will not be included in the formatted log.
 #
 # https://docs.python.org/3/library/logging.html#logrecord-attributes
 RESERVED: Tuple[str, ...] = (
