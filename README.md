@@ -234,7 +234,7 @@ This will cause all logs to have the `trace_id=123` pair regardless of including
 
 ### Required Software
 
-Refer to the links provided below to install these development dependencies:
+If you are using [nix](https://zero-to-nix.com/start/install/) & [direnv](https://direnv.net/docs/installation.html), then your dev environment will be managed automatically. Otherwise, you will need to manually install the following software:
 
 - [direnv](https://direnv.net)
 - [git](https://git-scm.com/)
@@ -244,8 +244,9 @@ Refer to the links provided below to install these development dependencies:
 
 **Setup**
 
+> If you are using pyenv, you will need to install the correct versions of python using `<runtimes.txt xargs -n 1 pyenv install -s`.
+
 ```sh
-$ <runtimes.txt xargs -n 1 pyenv install -s
 $ direnv allow
 $ pip install -r requirements/dev.txt
 $ pre-commit install

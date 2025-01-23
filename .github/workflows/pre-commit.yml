@@ -10,5 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-      - uses: pre-commit/action@v2.0.0
+      - uses: DeterminateSystems/nix-installer-action@v3
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: HatsuneMiku3939/direnv-action@v1
+      - run: |
+          pip install -r requirements/pre-commit.txt
+          pre-commit run -a

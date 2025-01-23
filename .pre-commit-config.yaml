@@ -28,22 +28,28 @@ repos:
       - id: sort-simple-yaml # Sorts simple YAML files which consist only of top-level keys, preserving comments and blocks.
       - id: trailing-whitespace # This hook trims trailing whitespace.
 
-  - repo: https://github.com/psf/black
-    rev: 22.10.0
+  - repo: local
     hooks:
       - id: black
+        name: black
+        language: system
+        entry: black --check
+        types: [python]
 
-  - repo: https://github.com/timothycrosley/isort
-    rev: 5.12.0
-    hooks:
       - id: isort
+        name: isort
+        language: system
+        entry: isort --check
+        types: [python]
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
-    hooks:
       - id: flake8
+        name: flake8
+        language: system
+        entry: flake8
+        types: [python]
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.991
-    hooks:
       - id: mypy
+        name: mypy
+        language: system
+        entry: mypy --ignore-missing-imports
+        types: [python]
