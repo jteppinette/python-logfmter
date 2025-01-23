@@ -14,5 +14,5 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: HatsuneMiku3939/direnv-action@v1
       - run: |
-          pip install -r requirements/dev.txt
+          pip install -r requirements/pre-commit.txt
           pre-commit run -a
