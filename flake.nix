@@ -18,6 +18,7 @@
             pkgs.python310
             pkgs.python311
             pkgs.python312
+            pkgs.python313
           ];
           shellHook = "unset PYTHONPATH";
         };
