@@ -1,0 +1,16 @@
+name: pre-commit-jmurr
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pre-commit-jmurr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JRMurr/direnv-nix-action@v4.1.0
+      - run: |
+          pip install -r requirements/dev.txt
+          pre-commit run -a
