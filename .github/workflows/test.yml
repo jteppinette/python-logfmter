@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: DeterminateSystems/nix-installer-action@v3
       - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: nicknovitski/nix-develop@v1
+      - uses: aldoborrero/direnv-nix-action@v2
       - run: |
           pip install -r requirements/test.txt
           tox
