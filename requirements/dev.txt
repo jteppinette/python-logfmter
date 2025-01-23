@@ -1,3 +1,4 @@
+-r ./base.txt
 -r ./publish.txt
 -r ./test.txt
 black==22.10.0
@@ -7,3 +8,4 @@ mypy==0.991
 pre-commit==2.20.0
 pytest-watch==4.2.0
 tox==3.27.1
+types-setuptools==75.8.0.20250110
