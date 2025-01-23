@@ -1,11 +1,14 @@
-# Python Logfmter
+![python logfmter](./banner.png)
+
+<div align="center">
 
 [![pre-commit](https://github.com/jteppinette/python-logfmter/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/jteppinette/python-logfmter/actions/workflows/pre-commit.yml)
 [![test](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml/badge.svg)](https://github.com/jteppinette/python-logfmter/actions/workflows/test.yml)
 [![python-3.9-3.10-3.11-3.12](https://img.shields.io/badge/python-3.9%20|%203.10%20|%203.11|%203.12-blue.svg)](.github/workflows/test.yml)
 
-Using the stdlib logging module and without changing a single logging call, logfmter supports
-**global** (first and third party) [logfmt](https://www.brandur.org/logfmt) structured logging.
+Add [logfmt](https://www.brandur.org/logfmt) structured logging using the stdlib logging module and without changing a single log call.
+
+</div>
 
 ```python
 > logging.warn("user created", extra=user)
@@ -13,7 +16,7 @@ Using the stdlib logging module and without changing a single logging call, logf
 at=WARNING msg="user created" first_name=John last_name=Doe age=25
 ```
 
-## Table of Contents
+# Table of Contents
 
 1. [Why](#why)
 2. [Install](#install)
@@ -27,24 +30,24 @@ at=WARNING msg="user created" first_name=John last_name=Doe age=25
    2. [Getting Started](#getting-started)
    3. [Publishing](#publishing)
 
-## Why
+# Why
 
 - enables both human and computer readable logs, [recommended as a "best practice" by Splunk](https://dev.splunk.com/enterprise/docs/developapps/addsupport/logging/loggingbestpractices/)
 - formats all first and third party logs, you never have to worry about a library using a different logging format
 - simple to integrate into any existing application, requires no changes to existing log statements i.e. [structlog](https://github.com/hynek/structlog)
 
-## Install
+# Install
 
 ```sh
 $ pip install logfmter
 ```
 
-## Usage
+# Usage
 
 This package exposes a single `Logfmter` class that can be integrated into
 the [standard library logging system](https://docs.python.org/3/howto/logging.html) like any [`logging.Formatter`](https://docs.python.org/3/howto/logging.html#formatters).
 
-### Integration
+## Integration
 
 **[basicConfig](https://docs.python.org/3/library/logging.html#logging.basicConfig)**
 
@@ -107,7 +110,7 @@ items after `"()"`:_
 
 Using logfmter via fileConfig is not supported, because fileConfig does not support custom formatter initialization. There may be some hacks to make this work in the future. Let me know if you have ideas or really need this.
 
-### Configuration
+## Configuration
 
 **keys**
 
@@ -179,7 +182,7 @@ logging.basicConfig(handlers=[handler])
 logging.error("hello") # at=ERROR when=2022-04-20 msg=hello
 ```
 
-### Extension
+## Extension
 
 You can subclass the formatter to change its behavior.
 
@@ -209,7 +212,7 @@ logging.basicConfig(handlers=[handler])
 logging.error({"example": True}) # at=ERROR example=yes
 ```
 
-### Guides
+## Guides
 
 **Default Key/Value Pairs**
 
@@ -230,9 +233,9 @@ logging.setLogRecordFactory(record_factory)
 This will cause all logs to have the `trace_id=123` pair regardless of including
 `trace_id` in keys or manually adding `trace_id` to the `extra` parameter or the `msg` object.
 
-## Development
+# Development
 
-### Required Software
+## Required Software
 
 If you are using [nix](https://zero-to-nix.com/start/install/) & [direnv](https://direnv.net/docs/installation.html), then your dev environment will be managed automatically. Otherwise, you will need to manually install the following software:
 
@@ -240,7 +243,7 @@ If you are using [nix](https://zero-to-nix.com/start/install/) & [direnv](https:
 - [git](https://git-scm.com/)
 - [pyenv](https://github.com/pyenv/pyenv#installation)
 
-### Getting Started
+## Getting Started
 
 **Setup**
 
@@ -274,7 +277,7 @@ _Run the test suite against all supported python versions._
 $ tox
 ```
 
-### Publishing
+## Publishing
 
 **Create**
 
