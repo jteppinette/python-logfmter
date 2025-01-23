@@ -13,4 +13,6 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v3
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: aldoborrero/direnv-nix-action@v2
-      - run: pre-commit run -a
+      - run: |
+          pip install -r requirements/dev.txt
+          pre-commit run -a
