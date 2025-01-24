@@ -1,3 +1,11 @@
+# 0.0.9 (2025-01-23)
+
+- Resolve pyright lint issue
+- Remove official support for eol python versions
+- Add nix dev support
+- Improve documentation
+- Add official Python 3.13 support
+
 # 0.0.8 (2024-05-24)
 
 - Add official support for Python 3.12.
